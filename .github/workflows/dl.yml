@@ -8,6 +8,27 @@ jobs:
     runs-on: ubuntu-latest
     env:
       MACHINE: misc2
+    strategy:
+      max-parallel: 5
+      matrix:
+        kind:
+          - 3x3_unreadable
+          - athletevideos
+          - callinshow
+          - fds
+          - hikakintv
+          - himarichannel
+          - ionlead
+          - kemikaru
+          - kikurin
+          - kizunaai
+          - mtrokk
+          - nao2d8x
+          - ohishiaki
+          - pookumano
+          - setsu
+          - takeiteasy
+          - ychannelgsv
     steps:
       - uses: actions/checkout@v2
       - name: Set up Tailscale
@@ -30,3 +51,9 @@ jobs:
           chmod a+x ~/ia ~/yt-dlp
           mkdir -p ~/.config/
           rsync -e "ssh -i $HOME/.ssh/key" lesmi@"[$(tailscale ip -6 $MACHINE)]":.config/ia.ini.orig ~/.config/ia.ini
+          rsync -e "ssh -i $HOME/.ssh/key" lesmi@"[$(tailscale ip -6 $MACHINE)]":internet_archive/"${{ matrix.kind }}" .
+      - name: Run task
+        working-directory: ${{ matrix.kind }}
+        run: |
+          ./dl.sh
+          true rsync -e "ssh -i $HOME/.ssh/key" archive.txt lesmi@"[$(tailscale ip -6 $MACHINE)]":internet_archive/"${{ matrix.kind }}"/archive.txt
