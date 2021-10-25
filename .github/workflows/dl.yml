@@ -10,6 +10,7 @@ jobs:
       MACHINE: misc2
     strategy:
       max-parallel: 5
+      fail-fast: false
       matrix:
         kind:
           - 3x3_unreadable
@@ -50,10 +51,10 @@ jobs:
           wget -O ~/yt-dlp https://bookish-octo-barnacle.vercel.app/api/release/latest/youtube-dl
           chmod a+x ~/ia ~/yt-dlp
           mkdir -p ~/.config/
-          rsync -e "ssh -i $HOME/.ssh/key" lesmi@"[$(tailscale ip -6 $MACHINE)]":.config/ia.ini.orig ~/.config/ia.ini
-          rsync -e "ssh -i $HOME/.ssh/key" lesmi@"[$(tailscale ip -6 $MACHINE)]":internet_archive/"${{ matrix.kind }}" .
+          rsync -avzzPs -e "ssh -i $HOME/.ssh/key" lesmi@"[$(tailscale ip -6 $MACHINE)]":.config/ia.ini.orig ~/.config/ia.ini
+          rsync -avzzPs -e "ssh -i $HOME/.ssh/key" lesmi@"[$(tailscale ip -6 $MACHINE)]":internet_archive/"${{ matrix.kind }}" .
       - name: Run task
         working-directory: ${{ matrix.kind }}
         run: |
           ./dl.sh
-          true rsync -e "ssh -i $HOME/.ssh/key" archive.txt lesmi@"[$(tailscale ip -6 $MACHINE)]":internet_archive/"${{ matrix.kind }}"/archive.txt
+          true rsync -avzzPs -e "ssh -i $HOME/.ssh/key" archive.txt lesmi@"[$(tailscale ip -6 $MACHINE)]":internet_archive/"${{ matrix.kind }}"/archive.txt
