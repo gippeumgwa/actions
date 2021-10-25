@@ -8,6 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       MACHINE: misc2
+      DIR_KIND: ${{ matrix.kind }}
     strategy:
       max-parallel: 5
       fail-fast: false
@@ -56,8 +57,8 @@ jobs:
           mkdir -p ~/.config/
           rsync -as -e "ssh -i $HOME/.ssh/key" lesmi@"[$(tailscale ip -6 $MACHINE)]":.config/ia.ini.orig ~/.config/ia.ini
           rsync -as -e "ssh -i $HOME/.ssh/key" lesmi@"[$(tailscale ip -6 $MACHINE)]":internet_archive/"${{ matrix.kind }}" .
+          cp *.config ~/
       - name: Run task
         working-directory: ${{ matrix.kind }}
-        run: |
-          ./dl.sh
-          rsync -as -e "ssh -i $HOME/.ssh/key" archive.txt lesmi@"[$(tailscale ip -6 $MACHINE)]":internet_archive/"${{ matrix.kind }}"/archive.txt
+        run: ./dl.sh
+          
