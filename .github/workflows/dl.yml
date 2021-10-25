@@ -1,0 +1,21 @@
+name: DL
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Tailscale
+        uses: tailscale/github-action@main
+        with:
+          authkey: ${{ secrets.TAILSCALE_AUTHKEY }}
+      - name: Set up mandantory commands and install config
+        run: |
+          wget -O "$HOME/ia" https://archive.org/download/ia-pex/ia
+          wget -O "$HOME/yt-dlp" https://bookish-octo-barnacle.vercel.app/api/release/latest/youtube-dl
+          chmod a+x "$HOME/ia" "$HOME/yt-dlp"
+          mkdir -p "$HOME/.config/"
+          rsync lesmi@misc2:.config/ia.ini.orig "$HOME/.config/ia.ini"
