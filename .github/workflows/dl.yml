@@ -29,4 +29,4 @@ jobs:
           wget -O ~/yt-dlp https://bookish-octo-barnacle.vercel.app/api/release/latest/youtube-dl
           chmod a+x ~/ia ~/yt-dlp
           mkdir -p ~/.config/
-          rsync lesmi@"[$(tailscale ip -6 $MACHINE)]":.config/ia.ini.orig ~/.config/ia.ini
+          rsync -e "ssh -i $HOME/.ssh/key" lesmi@"[$(tailscale ip -6 $MACHINE)]":.config/ia.ini.orig ~/.config/ia.ini
