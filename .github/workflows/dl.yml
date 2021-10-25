@@ -58,6 +58,7 @@ jobs:
           rsync -as -e "ssh -i $HOME/.ssh/key" lesmi@"[$(tailscale ip -6 $MACHINE)]":.config/ia.ini.orig ~/.config/ia.ini
           rsync -as -e "ssh -i $HOME/.ssh/key" lesmi@"[$(tailscale ip -6 $MACHINE)]":internet_archive/"${{ matrix.kind }}" .
           cp *.conf ~/
+          ~/yt-dlp --verbose || true
       - name: Run task
         working-directory: ${{ matrix.kind }}
         run: ./dl.sh
