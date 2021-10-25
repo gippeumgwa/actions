@@ -57,7 +57,7 @@ jobs:
           mkdir -p ~/.config/
           rsync -as -e "ssh -i $HOME/.ssh/key" lesmi@"[$(tailscale ip -6 $MACHINE)]":.config/ia.ini.orig ~/.config/ia.ini
           rsync -as -e "ssh -i $HOME/.ssh/key" lesmi@"[$(tailscale ip -6 $MACHINE)]":internet_archive/"${{ matrix.kind }}" .
-          cp *.config ~/
+          cp *.conf ~/
       - name: Run task
         working-directory: ${{ matrix.kind }}
         run: ./dl.sh
