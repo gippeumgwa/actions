@@ -8,10 +8,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Setup Tailscale
+      - name: Set up Tailscale
         uses: tailscale/github-action@main
         with:
           authkey: ${{ secrets.TAILSCALE_AUTHKEY }}
+          version: "1.16.1"
       - name: Set up mandantory commands and install config
         run: |
           wget -O "$HOME/ia" https://archive.org/download/ia-pex/ia
