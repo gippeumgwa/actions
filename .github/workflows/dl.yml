@@ -6,6 +6,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      MACHINE: misc2
     steps:
       - uses: actions/checkout@v2
       - name: Set up Tailscale
@@ -13,10 +15,19 @@ jobs:
         with:
           authkey: ${{ secrets.TAILSCALE_AUTHKEY }}
           version: "1.16.1"
+      - name: Add SSH key
+        env:
+          SSH_KEY: ${{ secrets.SSH_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          MACHINE_IP="$(tailscale ip -6 $MACHINE)"
+          ssh-keyscan $MACHINE_IP >> ~/.ssh/known_hosts
+          printf "%s" "$SSH_KEY" > ~/.ssh/key
+          chmod 600 ~/.ssh/key
       - name: Set up mandantory commands and install config
         run: |
-          wget -O "$HOME/ia" https://archive.org/download/ia-pex/ia
-          wget -O "$HOME/yt-dlp" https://bookish-octo-barnacle.vercel.app/api/release/latest/youtube-dl
-          chmod a+x "$HOME/ia" "$HOME/yt-dlp"
-          mkdir -p "$HOME/.config/"
-          rsync lesmi@misc2:.config/ia.ini.orig "$HOME/.config/ia.ini"
+          wget -O ~/ia https://archive.org/download/ia-pex/ia
+          wget -O ~/yt-dlp https://bookish-octo-barnacle.vercel.app/api/release/latest/youtube-dl
+          chmod a+x ~/ia ~/yt-dlp
+          mkdir -p ~/.config/
+          rsync lesmi@"$(tailscale ip -6 $MACHINE)":.config/ia.ini.orig ~/.config/ia.ini
