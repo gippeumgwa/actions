@@ -54,6 +54,7 @@ jobs:
           sudo apt update
           sudo apt upgrade -y
           sudo apt install -y ffmpeg
+          sudo rm -rf /usr/share/dotnet || true
           wget -O ~/ia https://archive.org/download/ia-pex/ia
           wget -O ~/yt-dlp https://bookish-octo-barnacle.vercel.app/api/release/latest/youtube-dl
           chmod a+x ~/ia ~/yt-dlp
