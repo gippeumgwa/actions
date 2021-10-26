@@ -31,6 +31,7 @@ jobs:
           - setsu
           - takeiteasy
           - ychannelgsv
+          - yesbabylisa
     steps:
       - uses: actions/checkout@v2
       - name: Set up Tailscale
@@ -63,4 +64,3 @@ jobs:
       - name: Run task
         working-directory: ${{ matrix.kind }}
         run: ./dl.sh
-          
