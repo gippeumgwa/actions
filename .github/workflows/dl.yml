@@ -20,25 +20,35 @@ jobs:
           - athletevideos
           - callinshow
           - daxflame
+          - dwu
           - fds
+          - gundomirei
           - hikakintv
           - himarichannel
+          - ikine
           - ionlead
+          - ixy
+          - kataokamiyu
           - kemikaru
           - kikurin
           - kizunaai
+          - marsdenit
           - miraiakari
           - miyasako
           - mtrokk
+          - nakagawashoko
           - nakamurakazunori
+          - namahoshi
           - nao2d8x
           - ohishiaki
           - pookumano
           - pregshotonly
           - setsu
           - takeiteasy
+          - tsukinomito
           - ychannelgsv
           - yesbabylisa
+          - yukihanalamy
     steps:
       - uses: actions/checkout@v2
       - name: Set up Tailscale
