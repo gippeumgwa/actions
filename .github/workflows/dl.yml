@@ -74,7 +74,7 @@ jobs:
           wget -O ~/yt-dlp https://bookish-octo-barnacle.vercel.app/api/release/latest/youtube-dl
           chmod a+x ~/ia ~/yt-dlp
           mkdir -p ~/.config/
-          rsync -as -e "ssh -i $HOME/.ssh/key" lesmi@"[$(tailscale ip -6 $MACHINE)]":.config/ia.ini.orig ~/.config/ia.ini
+          rsync -as -e "ssh -i $HOME/.ssh/key" lesmi@"[$(tailscale ip -6 $MACHINE)]":.config/ia.ini.bdmv ~/.config/ia.ini
           # rsync -as -e "ssh -i $HOME/.ssh/key" lesmi@"[$(tailscale ip -6 $MACHINE)]":ck.txt ~/ck.txt
           rsync -as -e "ssh -i $HOME/.ssh/key" lesmi@"[$(tailscale ip -6 $MACHINE)]":internet_archive/"${{ matrix.kind }}" .
           cp *.conf ~/
