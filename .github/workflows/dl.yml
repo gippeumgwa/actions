@@ -8,6 +8,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    continue-on-error: true
     env:
       MACHINE: misc2
       DIR_KIND: ${{ matrix.kind }}
@@ -55,7 +56,7 @@ jobs:
         uses: tailscale/github-action@main
         with:
           authkey: ${{ secrets.TAILSCALE_AUTHKEY }}
-          version: "1.16.1"
+          version: "1.18.1"
       - name: Add SSH key
         env:
           SSH_KEY: ${{ secrets.SSH_KEY }}
@@ -82,3 +83,28 @@ jobs:
       - name: Run task
         working-directory: ${{ matrix.kind }}
         run: ./dl.sh
+
+  post:
+    needs: [build]
+    runs-on: ubuntu-latest
+    env:
+      MACHINE: misc2
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Tailscale
+        uses: tailscale/github-action@main
+        with:
+          authkey: ${{ secrets.TAILSCALE_AUTHKEY }}
+          version: "1.18.1"
+      - name: Add SSH key
+        env:
+          SSH_KEY: ${{ secrets.SSH_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan "$(tailscale ip -6 $MACHINE)" >> ~/.ssh/known_hosts
+          printf "%s" "$SSH_KEY" > ~/.ssh/key
+          chmod 600 ~/.ssh/key
+      - name: Create a save point
+        run: |
+          ssh lesmi@"[$(tailscale ip -6 $MACHINE)]" bash -c 'cd ~/internet_archive ; ./save.sh'
+    
