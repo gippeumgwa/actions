@@ -5,12 +5,14 @@ on:
   schedule:
     - cron: '0 4,16 * * *'
 
+env:
+  MACHINE: misc2
+
 jobs:
   build:
     runs-on: ubuntu-latest
     continue-on-error: true
     env:
-      MACHINE: misc2
       DIR_KIND: ${{ matrix.kind }}
     strategy:
       max-parallel: 5
@@ -87,8 +89,6 @@ jobs:
   post:
     needs: [build]
     runs-on: ubuntu-latest
-    env:
-      MACHINE: misc2
     steps:
       - uses: actions/checkout@v2
       - name: Set up Tailscale
@@ -106,5 +106,5 @@ jobs:
           chmod 600 ~/.ssh/key
       - name: Create a save point
         run: |
-          ssh lesmi@"$(tailscale ip -6 $MACHINE)" bash -c 'cd ~/internet_archive ; ./save.sh'
+          ssh -i $HOME/.ssh/key lesmi@"$(tailscale ip -6 $MACHINE)" bash -c 'cd ~/internet_archive ; ./save.sh'
     
