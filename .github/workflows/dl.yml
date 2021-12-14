@@ -106,5 +106,4 @@ jobs:
           chmod 600 ~/.ssh/key
       - name: Create a save point
         run: |
-          ssh -i $HOME/.ssh/key lesmi@"$(tailscale ip -6 $MACHINE)" bash -xec 'cd $HOME/internet_archive && ./save.sh'
-    
+          echo 'cd ~/internet_archive && ./save.sh' | ssh lesmi@"$(tailscale ip -6 misc2)" bash
