@@ -75,16 +75,15 @@ jobs:
           wget -O ~/ia https://archive.org/download/ia-pex/ia
           wget -O ~/yt-dlp https://github.com/ytdl-patched/ytdl-patched/releases/latest/download/youtube-dl
           chmod a+x ~/ia ~/yt-dlp
-          mkdir -p ~/.config/
+          mkdir -p ~/.config/ ./ia
           rsync -e "ssh -i $HOME/.ssh/key" lesmi@"[$(tailscale ip -6 $MACHINE)]":.config/ia.ini.bdmv ~/.config/ia.ini
           # rsync -e "ssh -i $HOME/.ssh/key" lesmi@"[$(tailscale ip -6 $MACHINE)]":ck.txt ~/ck.txt
           # rsync -r -e "ssh -i $HOME/.ssh/key" lesmi@"[$(tailscale ip -6 $MACHINE)]":internet_archive/"${{ matrix.kind }}" .
-          mkdir "${{ matrix.kind }}"
-          sshfs -o IdentityFile=$HOME/.ssh/key lesmi@"[$(tailscale ip -6 $MACHINE)]":internet_archive/"${{ matrix.kind }}"/ "${{ matrix.kind }}"
+          sshfs -o IdentityFile=$HOME/.ssh/key lesmi@"[$(tailscale ip -6 $MACHINE)]":internet_archive/ ./ia/ 
           cp *.conf ~/
           ~/yt-dlp --verbose || true
       - name: Run task
-        working-directory: ${{ matrix.kind }}
+        working-directory: ia/${{ matrix.kind }}
         run: |
           sha256sum archive.txt || true
           ./dl.sh
