@@ -2,6 +2,9 @@ name: sshfs
 
 on:
   workflow_dispatch:
+  push:
+    paths:
+      - .github/workflows/sshfs.yml
 
 env:
   MACHINE: misc2
@@ -27,7 +30,7 @@ jobs:
       - name: Install
         run: |
           sudo apt update
-          sudo apt install -y sshfs
+          sudo apt install -y fuse sshfs
       - name: Mount
         run: |
           mkdir test
