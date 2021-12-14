@@ -70,8 +70,7 @@ jobs:
       - name: Set up mandantory commands and install config
         run: |
           sudo apt update
-          sudo apt upgrade -y
-          sudo apt install -y ffmpeg
+          sudo apt install -y ffmpeg sshfs
           sudo rm -rf /usr/share/dotnet || true
           wget -O ~/ia https://archive.org/download/ia-pex/ia
           wget -O ~/yt-dlp https://github.com/ytdl-patched/ytdl-patched/releases/latest/download/youtube-dl
