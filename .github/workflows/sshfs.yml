@@ -31,6 +31,6 @@ jobs:
       - name: Mount
         run: |
           mkdir test
-          sshfs lesmi@"[$(tailscale ip -6 $MACHINE)]":internet_archive/ test/
+          sshfs -o IdentityFile=$HOME/.ssh/key lesmi@"[$(tailscale ip -6 $MACHINE)]":internet_archive/ test/
           ls test/
           cat test/save.sh
