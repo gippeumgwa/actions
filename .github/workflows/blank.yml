@@ -1,0 +1,36 @@
+name: sshfs
+
+on:
+  workflow_dispatch:
+
+env:
+  MACHINE: misc2
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Tailscale
+        uses: tailscale/github-action@main
+        with:
+          authkey: ${{ secrets.TAILSCALE_AUTHKEY }}
+          version: "1.18.1"
+      - name: Add SSH key
+        env:
+          SSH_KEY: ${{ secrets.SSH_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan "$(tailscale ip -6 $MACHINE)" >> ~/.ssh/known_hosts
+          printf "%s" "$SSH_KEY" > ~/.ssh/key
+          chmod 600 ~/.ssh/key
+      - name: Install
+        run: |
+          sudo apt update
+          sudo apt install -y sshfs
+      - name: Mount
+        run: |
+          mkdir test
+          sshfs lesmi@"[$(tailscale ip -6 $MACHINE)]":internet_archive/ test/
+          ls test/
+          cat test/save.sh
