@@ -77,14 +77,17 @@ jobs:
           wget -O ~/yt-dlp https://github.com/ytdl-patched/ytdl-patched/releases/latest/download/youtube-dl
           chmod a+x ~/ia ~/yt-dlp
           mkdir -p ~/.config/
-          rsync -as -e "ssh -i $HOME/.ssh/key" lesmi@"[$(tailscale ip -6 $MACHINE)]":.config/ia.ini.bdmv ~/.config/ia.ini
-          # rsync -as -e "ssh -i $HOME/.ssh/key" lesmi@"[$(tailscale ip -6 $MACHINE)]":ck.txt ~/ck.txt
-          rsync -as -e "ssh -i $HOME/.ssh/key" lesmi@"[$(tailscale ip -6 $MACHINE)]":internet_archive/"${{ matrix.kind }}" .
+          rsync -e "ssh -i $HOME/.ssh/key" lesmi@"[$(tailscale ip -6 $MACHINE)]":.config/ia.ini.bdmv ~/.config/ia.ini
+          # rsync -e "ssh -i $HOME/.ssh/key" lesmi@"[$(tailscale ip -6 $MACHINE)]":ck.txt ~/ck.txt
+          rsync -e "ssh -i $HOME/.ssh/key" lesmi@"[$(tailscale ip -6 $MACHINE)]":internet_archive/"${{ matrix.kind }}" .
           cp *.conf ~/
           ~/yt-dlp --verbose || true
       - name: Run task
         working-directory: ${{ matrix.kind }}
-        run: ./dl.sh
+        run: |
+          sha256sum archive.txt || true
+          ./dl.sh
+          sha256sum archive.txt || true
 
   post:
     needs: [build]
