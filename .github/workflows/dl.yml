@@ -18,40 +18,8 @@ jobs:
       max-parallel: 5
       fail-fast: false
       matrix:
-        kind:
-          - 3x3_unreadable
-          - athletevideos
-          - callinshow
-          - daxflame
-          - dwu
-          - fds
-          - gundomirei
-          - hikakintv
-          - himarichannel
-          - ikine
-          - ionlead
-          - ixy
-          - kataokamiyu
-          - kemikaru
-          - kikurin
-          - kizunaai
-          - marsdenit
-          - miraiakari
-          - miyasako
-          - mtrokk
-          - nakagawashoko
-          - nakamurakazunori
-          - namahoshi
-          - nao2d8x
-          - ohishiaki
-          - pookumano
-          - pregshotonly
-          - setsu
-          - takeiteasy
-          - tsukinomito
-          - ychannelgsv
-          - yesbabylisa
-          - yukihanalamy
+        kind: [3x3_unreadable, 8bitvrstudio, amanekanata, aomichiakato, aomoririnko, athletevideos, callinshow, daxflame, dwu, fds, gundomirei, helloarchives, hikakintv, himarichannel, ikine, ionlead, ixy, kaguramea, kasukabetsukushi, kataokamiyu, kemikaru, kikurin, kizunaai, marsdenit, mashiro_nijisanji, miraiakari, miyasako, mtrokk, nakagawashoko, nakamurakazunori, namahoshi, nao2d8x, natorisana, nemchannel, ohishiaki, omegasisters, pookumano, pregshotonly, setsu, takeiteasy, todokiuka, tokinosora, tsukinomito, ychannelgsv, yesbabylisa, yukihanalamy]
+
     steps:
       - uses: actions/checkout@v2
       - name: Set up Tailscale
