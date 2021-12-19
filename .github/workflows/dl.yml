@@ -7,9 +7,36 @@ on:
 
 env:
   MACHINE: misc2
+  MACHINE_KEY: https://git.io/JDDlV
 
 jobs:
+  setup:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.setup.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Tailscale
+        uses: tailscale/github-action@main
+        with:
+          authkey: ${{ secrets.TAILSCALE_AUTHKEY }}
+          version: "1.18.1"
+      - name: Set up
+        id: setup
+        env:
+          SSH_KEY: ${{ secrets.SSH_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          wget -qO- $MACHINE_KEY >> ~/.ssh/known_hosts
+          printf "%s" "$SSH_KEY" > ~/.ssh/key
+          chmod 600 ~/.ssh/key
+          sudo apt install -y sshfs
+          sshfs -o IdentityFile=$HOME/.ssh/key lesmi@"[$(tailscale ip -6 $MACHINE)]":internet_archive/ ./ia/
+          cd ia/
+          echo "::set-output name=matrix::$(./enumerate.sh)"
+
   build:
+    needs: [setup]
     runs-on: ubuntu-latest
     continue-on-error: true
     env:
@@ -18,7 +45,7 @@ jobs:
       max-parallel: 5
       fail-fast: false
       matrix:
-        kind: [3x3_unreadable, 8bitvrstudio, amanekanata, aomichiakato, aomoririnko, athletevideos, callinshow, daxflame, dwu, fds, gundomirei, helloarchives, hikakintv, himarichannel, ikine, ionlead, ixy, kaguramea, kasukabetsukushi, kataokamiyu, kemikaru, kikurin, kizunaai, marsdenit, mashiro_nijisanji, miraiakari, miyasako, mtrokk, nakagawashoko, nakamurakazunori, namahoshi, nao2d8x, natorisana, nemchannel, ohishiaki, omegasisters, pookumano, pregshotonly, setsu, takeiteasy, todokiuka, tokinosora, tsukinomito, ychannelgsv, yesbabylisa, yukihanalamy]
+        kind: ${{ parseJSON(needs.setup.outputs.matrix) }}
 
     steps:
       - uses: actions/checkout@v2
@@ -32,7 +59,7 @@ jobs:
           SSH_KEY: ${{ secrets.SSH_KEY }}
         run: |
           mkdir -p ~/.ssh
-          ssh-keyscan "$(tailscale ip -6 $MACHINE)" >> ~/.ssh/known_hosts
+          wget -qO- $MACHINE_KEY >> ~/.ssh/known_hosts
           printf "%s" "$SSH_KEY" > ~/.ssh/key
           chmod 600 ~/.ssh/key
       - name: Set up mandantory commands and install config
@@ -72,9 +99,9 @@ jobs:
           SSH_KEY: ${{ secrets.SSH_KEY }}
         run: |
           mkdir -p ~/.ssh
-          ssh-keyscan "$(tailscale ip -6 $MACHINE)" >> ~/.ssh/known_hosts
+          wget -qO- $MACHINE_KEY >> ~/.ssh/known_hosts
           printf "%s" "$SSH_KEY" > ~/.ssh/key
           chmod 600 ~/.ssh/key
       - name: Create a save point
         run: |
-          echo 'cd ~/internet_archive && ./save.sh' | ssh -i $HOME/.ssh/key lesmi@"$(tailscale ip -6 misc2)" bash
+          echo 'cd ~/internet_archive && ./save.sh' | ssh -i $HOME/.ssh/key lesmi@"$(tailscale ip -6 $MACHINE)" bash
