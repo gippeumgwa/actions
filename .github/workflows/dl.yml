@@ -7,7 +7,7 @@ on:
 
 env:
   MACHINE: misc2
-  MACHINE_KEY: https://git.io/JDDlV
+  MACHINE_KEY: https://git.io/Jy7cM
 
 jobs:
   setup:
