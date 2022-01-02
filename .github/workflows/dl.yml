@@ -80,6 +80,7 @@ jobs:
       - name: Run task
         working-directory: ia/${{ matrix.kind }}
         run: |
+          ./secret.sh
           sha256sum archive.txt || true
           ./dl.sh
           sha256sum archive.txt || true
