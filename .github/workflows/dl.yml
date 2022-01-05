@@ -3,7 +3,7 @@ name: DL
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 4,16 * * *'
+    - cron: '0 4,12,20 * * *'
 
 env:
   MACHINE: misc2
