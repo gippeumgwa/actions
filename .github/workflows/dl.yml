@@ -65,10 +65,17 @@ jobs:
       - name: Set up mandantory commands and install config
         run: |
           sudo apt update
-          sudo apt install -y ffmpeg sshfs
+          sudo apt install -y wget sshfs
           sudo rm -rf /usr/share/dotnet || true
           wget -O ~/ia https://archive.org/download/ia-pex/ia
           wget -O ~/yt-dlp https://github.com/ytdl-patched/ytdl-patched/releases/latest/download/youtube-dl
+          wget -qO- https://github.com/yt-dlp/FFmpeg-Builds/releases/download/latest/ffmpeg-n4.4-latest-linux64-gpl-4.4.tar.xz | tar -xJf - || true
+          if [ -f ffmpeg-n4.4-latest-linux64-gpl-4.4/bin/ffmpeg ] ; then
+            echo "$PWD/ffmpeg-n4.4-latest-linux64-gpl-4.4/bin/" >> $GITHUB_PATH
+          else
+            echo "::warning::Failed to detect ffmpeg installation. Falling back to apt install"
+            sudo apt install -y ffmpeg
+          fi
           chmod a+x ~/ia ~/yt-dlp
           mkdir -p ~/.config/ ./ia
           rsync -e "ssh -i $HOME/.ssh/key" lesmi@"[$(tailscale ip -6 $MACHINE)]":.config/ia.ini.bdmv ~/.config/ia.ini
