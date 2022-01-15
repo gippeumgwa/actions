@@ -67,7 +67,7 @@ jobs:
           sudo apt update
           sudo apt install -y wget sshfs
           sudo rm -rf /usr/share/dotnet || true
-          wget -O ~/ia https://archive.org/download/ia-pex/ia
+          wget -O ~/ia https://archive.org/download/ia-pex/ia || (rm -f ~/ia && brew install internetarchive && ln -s $(which ia) ~/ia )
           wget -O ~/yt-dlp https://github.com/ytdl-patched/ytdl-patched/releases/latest/download/youtube-dl
           wget -qO- https://github.com/yt-dlp/FFmpeg-Builds/releases/download/latest/ffmpeg-n4.4-latest-linux64-gpl-4.4.tar.xz | tar -xJf - || true
           if [ -f ffmpeg-n4.4-latest-linux64-gpl-4.4/bin/ffmpeg ] ; then
@@ -84,6 +84,8 @@ jobs:
           sshfs -o IdentityFile=$HOME/.ssh/key lesmi@"[$(tailscale ip -6 $MACHINE)]":internet_archive/ ./ia/
           ./ia/secret.sh || true
           cp *.conf ~/
+      - name: Check application versions
+        run: |
           ~/yt-dlp --verbose || true
       - name: Run task
         working-directory: ia/${{ matrix.kind }}
