@@ -91,8 +91,15 @@ jobs:
         working-directory: ia/${{ matrix.kind }}
         run: |
           sha256sum archive.txt || true
-          ./dl.sh
+          touch /tmp/download-stderr
+          tail -f /tmp/download-stderr &
+          ./dl.sh 2>/tmp/download-stderr
           sha256sum archive.txt || true
+      - name: Show error log
+        working-directory: ia/${{ matrix.kind }}
+        if: ${{ 0 == 0 || success() || failed() }}
+        run: cat /tmp/download-stderr
+
 
   post:
     needs: [build]
