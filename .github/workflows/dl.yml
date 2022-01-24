@@ -97,7 +97,7 @@ jobs:
           sha256sum archive.txt || true
       - name: Show error log
         working-directory: ia/${{ matrix.kind }}
-        if: ${{ 0 == 0 || success() || failed() }}
+        if: ${{ 0 == 0 || success() || failure() }}
         run: cat /tmp/download-stderr
 
 
