@@ -10,6 +10,7 @@ jobs:
     steps:
       - run: apt list --installed
       - run: apt list --installed | grep -v automatic
+      - run: ls /home/linuxbrew/.linuxbrew/Cellar/
       - name: path of some commands
         run: |
           whereis helm ant gradle lerna maven sbt ansible apt-fast azcopy bazel \
@@ -26,5 +27,6 @@ jobs:
           sudo apt autoremove -y firefox google-chrome-stable build-essential \
             *dotnet* g{cc,++} *libboost* gfortran* google-cloud-sdk gnupg* \
             hhvm  fuse-overlayfs gh git-lfs git-ftp *dotnet* *aspnetcore* aria2 \
-            brotli *mono* *clang* || true
+            brotli *mono* *clang* php* r-* skopeo mediainfo moby-* mongodb-* \
+            mysql-* p7zip* || true
       - run: df -h
