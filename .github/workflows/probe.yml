@@ -28,7 +28,8 @@ jobs:
           sudo swapoff -a
           sudo umount /boot/efi /mnt
           sudo wipefs /dev/sda?* /dev/sda
-          sudo btrfs-convert --uuid copy  /dev/sdb1
+          sudo btrfs-convert /dev/sdb1
+          sudo btrfstune -U 39bd9ac9-1b8c-487c-85b0-5b4726f12ada /dev/sdb1
           sudo remount / -t btrfs
       - name: Erase everything unnessesarily eating much space
         continue-on-error: true
