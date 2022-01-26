@@ -20,13 +20,15 @@ jobs:
             alibaba{,-}{,cloud}{,-cli} aws-cli gh gcloud hub netlify{,-cli} openshift \
             oras vercel {google-,}chrome{,-stable,.canary} firefox
       - run: df -h
-      - name: Erase everything unnessesarily easting much space
+      - name: Erase everything unnessesarily eating much space
         continue-on-error: true
         run: |
           wget https://github.com/ZZROTDesign/docker-clean/raw/master/docker-clean -O docker-clean
           chmod a+x docker-clean
           sudo ./docker-clean all
-          sudo rm -rf docker-clean /usr/share/dotnet/ /usr/lib/mono/ /usr/local/lib/android/sdk/ /opt/hostedtoolcache/ || true
+          sudo rm -rf docker-clean /usr/share/dotnet/ /usr/lib/mono/ \
+            /usr/local/lib/android/sdk/ /opt/hostedtoolcache/ \
+            /usr/share/miniconda/ || true
           sudo systemctl stop docker.service
           sudo apt autoremove -y firefox google-chrome-stable build-essential \
             *dotnet* g{cc,++} *libboost* gfortran* google-cloud-sdk gnupg* \
