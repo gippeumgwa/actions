@@ -19,6 +19,7 @@ jobs:
             podman polumi r skeopeo svn terraform-cli yamllint yq zstd \
             alibaba{,-}{,cloud}{,-cli} aws-cli gh gcloud hub netlify{,-cli} openshift \
             oras vercel {google-,}chrome{,-stable,.canary} firefox
+          echo "$ANDROID_ROOT" "$CONDA" "$SELENIUM_JAR_NAME" "$NVM_DIR"
       - run: df -h
       - name: Erase everything unnessesarily eating much space
         continue-on-error: true
