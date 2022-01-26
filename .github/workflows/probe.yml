@@ -19,7 +19,7 @@ jobs:
             podman polumi r skeopeo svn terraform-cli yamllint yq zstd \
             alibaba{,-}{,cloud}{,-cli} aws-cli gh gcloud hub netlify{,-cli} openshift \
             oras vercel {google-,}chrome{,-stable,.canary} firefox
-          echo "$ANDROID_ROOT" "$CONDA" "$SELENIUM_JAR_NAME" "$NVM_DIR"
+          echo "$ANDROID_SDK_ROOT" "$CONDA" "$SELENIUM_JAR_PATH" "$NVM_DIR"
       - run: df -h
       - name: Erase everything unnessesarily eating much space
         continue-on-error: true
@@ -30,8 +30,8 @@ jobs:
           sudo ./docker-clean all
           yes | sudo ./n uninstall
           sudo rm -rf docker-clean n /usr/share/dotnet/ /usr/lib/mono/ \
-            "$ANDROID_ROOT" /opt/hostedtoolcache/ /var/lib/docker/ \
-            "$CONDA" "$SELENIUM_JAR_NAME" "$NVM_DIR" || true
+            "$ANDROID_SDK_ROOT" /opt/hostedtoolcache/ /var/lib/docker/ \
+            "$CONDA" "$SELENIUM_JAR_PATH" "$NVM_DIR" || true
           sudo systemctl stop docker.service
           sudo apt autoremove -y firefox google-chrome-stable build-essential \
             *dotnet* g{cc,++} *libboost* gfortran* google-cloud-sdk gnupg* \
