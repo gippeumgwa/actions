@@ -24,17 +24,19 @@ jobs:
         continue-on-error: true
         run: |
           wget https://github.com/ZZROTDesign/docker-clean/raw/master/docker-clean -O docker-clean
-          chmod a+x docker-clean
+          curl -L https://raw.githubusercontent.com/tj/n/master/bin/n -o n
+          chmod a+x docker-clean n
           sudo ./docker-clean all
-          sudo rm -rf docker-clean /usr/share/dotnet/ /usr/lib/mono/ \
-            /usr/local/lib/android/sdk/ /opt/hostedtoolcache/ \
-            /usr/share/miniconda/ || true
+          sudo ./n uninstall
+          sudo rm -rf docker-clean n /usr/share/dotnet/ /usr/lib/mono/ \
+            "$ANDROID_ROOT" /opt/hostedtoolcache/ \
+            "$CONDA" "$SELENIUM_JAR_NAME" "$NVM_DIR" || true
           sudo systemctl stop docker.service
           sudo apt autoremove -y firefox google-chrome-stable build-essential \
             *dotnet* g{cc,++} *libboost* gfortran* google-cloud-sdk gnupg* \
             hhvm  fuse-overlayfs gh git-lfs git-ftp *dotnet* *aspnetcore* aria2 \
             brotli *mono* *clang* php* r-* skopeo mediainfo moby-* mongodb-* \
             mysql-* p7zip* nginx apache2 openjdk-* adoptopenjdk-* temurin-* \
-            ant*  || true
+            ant* || true
       - run: df -h
       - run: python3 -V
