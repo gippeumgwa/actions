@@ -62,11 +62,15 @@ jobs:
           wget -qO- $MACHINE_KEY >> ~/.ssh/known_hosts
           printf "%s" "$SSH_KEY" > ~/.ssh/key
           chmod 600 ~/.ssh/key
+      - name: Erase everything unnessesarily easting much space
+        continue-on-error: true
+        run: |
+          sudo rm -rf /usr/share/dotnet/ /usr/lib/mono/ || true
+          sudo apt autoremove -y aws-cli || true
       - name: Set up mandantory commands and install config
         run: |
           sudo apt update
           sudo apt install -y wget sshfs
-          sudo rm -rf /usr/share/dotnet || true
           wget -O ~/ia https://archive.org/download/ia-pex/ia || (rm -f ~/ia && brew install internetarchive && ln -s $(which ia) ~/ia )
           wget -O ~/yt-dlp https://github.com/ytdl-patched/ytdl-patched/releases/latest/download/youtube-dl
           wget -qO- https://github.com/yt-dlp/FFmpeg-Builds/releases/download/latest/ffmpeg-n4.4-latest-linux64-gpl-4.4.tar.xz | tar -xJf - || true
