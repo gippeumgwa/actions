@@ -16,4 +16,11 @@ jobs:
             hhvm kubectl kustomize leningen mediainfo mercurial minikube n newman nvm parcel \
             podman polumi r skeopeo svn terraform-cli yamllint yq zstd \
             alibaba{,-}{,cloud}{,-cli} aws-cli gh gcloud hub netlify{,-cli} openshift \
-            oras vercel
+            oras vercel {google-,}chrome{,-stable,.canary} firefox
+      - run: df -h
+      - name: Erase everything unnessesarily easting much space
+        continue-on-error: true
+        run: |
+          sudo rm -rf /usr/share/dotnet/ /usr/lib/mono/ || true
+          sudo apt autoremove -y aws-cli || true
+      - run: df -h
