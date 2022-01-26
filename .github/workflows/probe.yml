@@ -20,6 +20,7 @@ jobs:
             alibaba{,-}{,cloud}{,-cli} aws-cli gh gcloud hub netlify{,-cli} openshift \
             oras vercel {google-,}chrome{,-stable,.canary} firefox
           echo "$ANDROID_SDK_ROOT" "$CONDA" "$SELENIUM_JAR_PATH" "$NVM_DIR"
+          ls /mnt/
       - run: df -h
       - name: Erase everything unnessesarily eating much space
         continue-on-error: true
