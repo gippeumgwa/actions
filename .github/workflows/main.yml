@@ -9,6 +9,7 @@ jobs:
 
     steps:
       - run: apt list --installed
+      - run: apt list --installed | grep -v automatic
       - name: path of some commands
         run: |
           whereis helm ant gradle lerna maven sbt ansible apt-fast azcopy bazel \
@@ -22,5 +23,8 @@ jobs:
         continue-on-error: true
         run: |
           sudo rm -rf /usr/share/dotnet/ /usr/lib/mono/ || true
-          sudo apt autoremove -y aws-cli || true
+          sudo apt autoremove -y firefox google-chrome-stable build-essential \
+            *dotnet* *g{cc,++}* *libboost* gfortran* google-cloud-sdk gnupg* \
+            hhvm  fuse-overlayfs gh git-lfs git-ftp *dotnet* *aspnetcore* aria2 \
+            brotli *mono* *clang* || true
       - run: df -h
