@@ -29,15 +29,17 @@ jobs:
           chmod a+x docker-clean n
           sudo ./docker-clean all
           yes | sudo ./n uninstall
+          sudo systemctl stop docker.service snapd.service
+          sudo umount -l /snap/*/*/ || true
           sudo rm -rf docker-clean n /usr/share/dotnet/ /usr/lib/mono/ \
             "$ANDROID_SDK_ROOT" /opt/hostedtoolcache/ /var/lib/docker/ \
-            "$CONDA" "$SELENIUM_JAR_PATH" "$NVM_DIR" || true
-          sudo systemctl stop docker.service
+            "$CONDA" "$SELENIUM_JAR_PATH" "$NVM_DIR" \
+            /var/lib/snapd/ /snap/ || true
           sudo apt autoremove -y firefox google-chrome-stable build-essential \
             *dotnet* g{cc,++} *libboost* gfortran* google-cloud-sdk gnupg* \
             hhvm  fuse-overlayfs gh git-lfs git-ftp *dotnet* *aspnetcore* aria2 \
             brotli *mono* *clang* php* r-* skopeo mediainfo moby-* mongodb-* \
             mysql-* p7zip* nginx apache2 openjdk-* adoptopenjdk-* temurin-* \
-            ant* || true
+            ant* snapd || true
       - run: df -h
       - run: python3 -V
