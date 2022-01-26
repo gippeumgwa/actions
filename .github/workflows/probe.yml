@@ -32,7 +32,7 @@ jobs:
           wget -qO- https://bit.ly/3rRqGWO | git apply -
           ./autogen.sh
           ./configure C{C,XX}FLAGS='-static -I/usr/include/' PKG_CONFIG_PATH=/usr/lib/x86_64-linux-gnu/pkgconfig/ \
-            --with-convert --disable-documentation --disable-shared --enable-static
+            --with-convert --disable-documentation --disable-shared --enable-static --disable-zoned --disable-libudev
           make -j8 btrfs-convert
           sudo rm -f /usr/bin/btrfs-convert || true
           sudo mv btrfs-convert /usr/bin/
