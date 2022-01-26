@@ -45,12 +45,9 @@ jobs:
           export MAINDSK="$(findmnt / | tail -n1 | awk '{ print $2 }' | sed -E 's/[0-9]+$//')"
           sudo umount /boot/efi /mnt
           sudo wipefs "$TMPDSK"1 "$TMPDSK" "$MAINDSK"15
-          export TESTLO="$(sudo losetup -f)"
-          sudo losetup $TESTLO "$MAINDSK"1
-          sync
-          sudo btrfs-convert $TESTLO
-          # sudo btrfstune -U 39bd9ac9-1b8c-487c-85b0-5b4726f12ada $TESTLO
-          sudo losetup -d $TESTLO
+          for I in $(sed 3) ; do sync ; echo 3 | sudo tee /proc/sys/vm/drop_caches ; done || true
+          sudo btrfs-convert "$MAINDSK"1
+          # sudo btrfstune -U 39bd9ac9-1b8c-487c-85b0-5b4726f12ada "$MAINDSK"1
           sudo mount / -t btrfs -o remount
           sudo btrfs subvol del /ext2_saved
           sudo btrfs dev add "$TMPDSK" "$MAINDSK"15 .
