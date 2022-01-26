@@ -72,6 +72,7 @@ jobs:
             hhvm  fuse-overlayfs gh git-lfs git-ftp *dotnet* *aspnetcore* aria2 \
             brotli *mono* *clang* php* r-* skopeo mediainfo moby-* mongodb-* \
             mysql-* p7zip* nginx apache2 openjdk-* adoptopenjdk-* temurin-* \
-            ant* snapd libudev-dev liblzo2-dev uuid-dev libblkid-dev automake || true
+            ant* snapd libudev-dev liblzo2-dev uuid-dev libblkid-dev comerr-dev \
+            libext2fs-dev automake || true
       - run: df -h
       - run: python3 -V
