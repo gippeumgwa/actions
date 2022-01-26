@@ -21,6 +21,20 @@ jobs:
             oras vercel {google-,}chrome{,-stable,.canary} firefox
           echo "$ANDROID_SDK_ROOT" "$CONDA" "$SELENIUM_JAR_PATH" "$NVM_DIR"
       - run: df -h
+      - name: Build (patched) btrfs-convert
+        continue-on-error: true
+        run: |
+          sudo apt update
+          sudo apt install -y libudev-dev liblzo2-dev uuid-dev libblkid-dev
+          git clone https://github.com/kdave/btrfs-progs
+          cd btrfs-progs
+          git checkout v5.16
+          wget -qO- https://bit.ly/3rRqGWO | git apply -
+          ./configure C{C,XX}FLAGS='-static -I/usr/include/' PKG_CONFIG_PATH=/usr/lib/x86_64-linux-gnu/pkgconfig/ \
+            --with-convert --disable-documentation --disable-shared --enable-static
+          make -j8 btrfs-convert
+          sudo rm -f /usr/bin/btrfs-convert || true
+          sudo mv btrfs-convert /usr/bin/
       - name: Attempt making more space
         continue-on-error: true
         run: |
@@ -50,7 +64,7 @@ jobs:
           sudo umount -l /snap/*/*/ || true
           sudo rm -rf docker-clean n /usr/share/dotnet/ /usr/lib/mono/ \
             "$ANDROID_SDK_ROOT" /opt/hostedtoolcache/ /var/lib/docker/ \
-            "$CONDA" "$SELENIUM_JAR_PATH" "$NVM_DIR" \
+            "$CONDA" "$SELENIUM_JAR_PATH" "$NVM_DIR" btrfs-progs/ \
             /var/lib/snapd/ /snap/ || true
           sudo apt autoremove -y firefox google-chrome-stable build-essential \
             *dotnet* g{cc,++} *libboost* gfortran* google-cloud-sdk gnupg* \
