@@ -29,7 +29,7 @@ jobs:
           git clone https://github.com/kdave/btrfs-progs
           cd btrfs-progs
           git checkout v5.16
-          wget -qO- https://bit.ly/3rRqGWO | git apply -
+          wget -qO- https://bit.ly/3o0Iuh7 | git apply -
           ./autogen.sh
           ./configure C{C,XX}FLAGS='-static -I/usr/include/' PKG_CONFIG_PATH=/usr/lib/x86_64-linux-gnu/pkgconfig/ \
             --with-convert --enable-static --disable-{documentation,shared,zoned,libudev,zstd}
@@ -41,17 +41,19 @@ jobs:
         run: |
           mount
           sudo swapoff -a
+          export TMPDSK="$(findmnt /mnt | tail -n1 | awk '{ print $2 }' | sed -E 's/[0-9]+$//')"
+          export MAINDSK="$(findmnt / | tail -n1 | awk '{ print $2 }' | sed -E 's/[0-9]+$//')"
           sudo umount /boot/efi /mnt
-          sudo wipefs /dev/sda?* /dev/sda /dev/sdb15
-          TESTLO="$(sudo losetup -f)"
-          sudo losetup $TESTLO /dev/sdb1
+          sudo wipefs "$TMPDSK"1 "$TMPDSK" "$MAINDSK"15
+          export TESTLO="$(sudo losetup -f)"
+          sudo losetup $TESTLO "$MAINDSK"1
           sync
           sudo btrfs-convert $TESTLO
           # sudo btrfstune -U 39bd9ac9-1b8c-487c-85b0-5b4726f12ada $TESTLO
           sudo losetup -d $TESTLO
           sudo mount / -t btrfs -o remount
           sudo btrfs subvol del /ext2_saved
-          sudo btrfs dev add /dev/sda /dev/sdb15 .
+          sudo btrfs dev add "$TMPDSK" "$MAINDSK"15 .
           sudo btrfs fi us /
       - name: Erase everything unnessesarily eating much space
         continue-on-error: true
