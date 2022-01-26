@@ -31,7 +31,8 @@ jobs:
           TESTLO="$(sudo losetup -f)"
           sudo losetup $TESTLO /dev/sdb1
           sync
-          sudo tune2fs -f -U random $TESTLO
+          sudo e2fsck -pf $TESTLO
+          sudo tune2fs -f -O `^has_journal` -U random $TESTLO
           sudo btrfs-convert $TESTLO
           sudo btrfstune -U 39bd9ac9-1b8c-487c-85b0-5b4726f12ada $TESTLO
           sudo losetup -d $TESTLO
