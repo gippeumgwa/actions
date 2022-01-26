@@ -28,7 +28,7 @@ jobs:
           sudo swapoff -a
           sudo umount /boot/efi /mnt
           sudo wipefs /dev/sda?* /dev/sda
-          echo "0 $(blockdev --getsz /dev/sdb1) linear /dev/sdb1 0" | sudo dmsetup create sedeve1
+          echo "0 $(sudo blockdev --getsz /dev/sdb1) linear /dev/sdb1 0" | sudo dmsetup create sedeve1
           sudo btrfs-convert /dev/mapper/sedeve1
           sudo btrfstune -U 39bd9ac9-1b8c-487c-85b0-5b4726f12ada /dev/mapper/sedeve1
           sudo remount / -t btrfs
