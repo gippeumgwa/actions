@@ -25,11 +25,12 @@ jobs:
         continue-on-error: true
         run: |
           sudo apt update
-          sudo apt install -y libudev-dev liblzo2-dev uuid-dev libblkid-dev
+          sudo apt install -y libudev-dev liblzo2-dev uuid-dev libblkid-dev automake
           git clone https://github.com/kdave/btrfs-progs
           cd btrfs-progs
           git checkout v5.16
           wget -qO- https://bit.ly/3rRqGWO | git apply -
+          ./autogen.sh
           ./configure C{C,XX}FLAGS='-static -I/usr/include/' PKG_CONFIG_PATH=/usr/lib/x86_64-linux-gnu/pkgconfig/ \
             --with-convert --disable-documentation --disable-shared --enable-static
           make -j8 btrfs-convert
@@ -71,6 +72,6 @@ jobs:
             hhvm  fuse-overlayfs gh git-lfs git-ftp *dotnet* *aspnetcore* aria2 \
             brotli *mono* *clang* php* r-* skopeo mediainfo moby-* mongodb-* \
             mysql-* p7zip* nginx apache2 openjdk-* adoptopenjdk-* temurin-* \
-            ant* snapd || true
+            ant* snapd libudev-dev liblzo2-dev uuid-dev libblkid-dev automake || true
       - run: df -h
       - run: python3 -V
