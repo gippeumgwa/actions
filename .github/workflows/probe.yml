@@ -30,7 +30,8 @@ jobs:
           sudo wipefs /dev/sda?* /dev/sda
           TESTLO="$(sudo losetup -f)"
           sudo losetup $TESTLO /dev/sdb1
-          sudo tune2fs -U random $TESTLO
+          sync
+          sudo tune2fs -f -U random $TESTLO
           sudo btrfs-convert $TESTLO
           sudo btrfstune -U 39bd9ac9-1b8c-487c-85b0-5b4726f12ada $TESTLO
           sudo losetup -d $TESTLO
