@@ -27,7 +27,7 @@ jobs:
           curl -L https://raw.githubusercontent.com/tj/n/master/bin/n -o n
           chmod a+x docker-clean n
           sudo ./docker-clean all
-          sudo ./n uninstall
+          yes | sudo ./n uninstall
           sudo rm -rf docker-clean n /usr/share/dotnet/ /usr/lib/mono/ \
             "$ANDROID_ROOT" /opt/hostedtoolcache/ \
             "$CONDA" "$SELENIUM_JAR_NAME" "$NVM_DIR" || true
