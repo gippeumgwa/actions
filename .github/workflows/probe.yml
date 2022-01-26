@@ -20,8 +20,14 @@ jobs:
             alibaba{,-}{,cloud}{,-cli} aws-cli gh gcloud hub netlify{,-cli} openshift \
             oras vercel {google-,}chrome{,-stable,.canary} firefox
           echo "$ANDROID_SDK_ROOT" "$CONDA" "$SELENIUM_JAR_PATH" "$NVM_DIR"
-          cat /mnt/DATALOSS_WARNING_README.txt
       - run: df -h
+      - name: Attempt making more space
+        continue-on-error: true
+        run: |
+          mount
+          sudo swapoff -a
+          sudo umount /boot/efi /mnt
+          sudo wipefs /dev/sdb?* /dev/sda?* /dev/sda /dev/sdb
       - name: Erase everything unnessesarily eating much space
         continue-on-error: true
         run: |
