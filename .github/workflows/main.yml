@@ -1,0 +1,19 @@
+name: Probe current environment
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - run: apt list --installed
+      - name: path of some commands
+        run: |
+          whereis helm ant gradle lerna maven sbt ansible apt-fast azcopy bazel \
+            java bazelisk bicep buildah cmake docker docker-compose fastlane haveged heroku heroku-cli \
+            hhvm kubectl kustomize leningen mediainfo mercurial minikube n newman nvm parcel \
+            podman polumi r skeopeo svn terraform-cli yamllint yq zstd \
+            alibaba{,-}{,cloud}{,-cli} aws-cli gh gcloud hub netlify{,-cli} openshift \
+            oras vercel
