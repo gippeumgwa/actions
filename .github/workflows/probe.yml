@@ -48,6 +48,7 @@ jobs:
           for I in $(sed 3) ; do sync ; echo 3 | sudo tee /proc/sys/vm/drop_caches ; done || true
           TESTLO="$(sudo losetup -f)"
           sudo losetup $TESTLO "$MAINDSK"1
+          sudo dmesg -w
           sudo e2fsck -fy $TESTLO || true
           sudo btrfs-convert "$MAINDSK"1
           sudo losetup -d $TESTLO
