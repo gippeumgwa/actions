@@ -32,7 +32,7 @@ jobs:
           sudo losetup $TESTLO /dev/sdb1
           # echo "0 $(sudo blockdev --getsz /dev/sdb1) linear /dev/sdb1 0" | sudo dmsetup create sedeve1
           sudo btrfs-convert $TESTLO
-          sudo btrfstune -U 39bd9ac9-1b8c-487c-85b0-5b4726f12ada $TESTLO
+          sudo btrfstune -f -U 39bd9ac9-1b8c-487c-85b0-5b4726f12ada $TESTLO
           sudo remount / -t btrfs
       - name: Erase everything unnessesarily eating much space
         continue-on-error: true
