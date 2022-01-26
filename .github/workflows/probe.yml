@@ -29,7 +29,7 @@ jobs:
           sudo ./docker-clean all
           yes | sudo ./n uninstall
           sudo rm -rf docker-clean n /usr/share/dotnet/ /usr/lib/mono/ \
-            "$ANDROID_ROOT" /opt/hostedtoolcache/ \
+            "$ANDROID_ROOT" /opt/hostedtoolcache/ /var/lib/docker/ \
             "$CONDA" "$SELENIUM_JAR_NAME" "$NVM_DIR" || true
           sudo systemctl stop docker.service
           sudo apt autoremove -y firefox google-chrome-stable build-essential \
