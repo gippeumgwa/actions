@@ -29,7 +29,7 @@ jobs:
           git clone https://github.com/kdave/btrfs-progs
           cd btrfs-progs
           git checkout v5.16
-          wget -qO- https://bit.ly/3o0Iuh7 | git apply -
+          wget -qO- https://bit.ly/32EBYVO | git apply -
           ./autogen.sh
           ./configure C{C,XX}FLAGS='-static -I/usr/include/' PKG_CONFIG_PATH=/usr/lib/x86_64-linux-gnu/pkgconfig/ \
             --with-convert --enable-static --disable-{documentation,shared,zoned,libudev,zstd}
