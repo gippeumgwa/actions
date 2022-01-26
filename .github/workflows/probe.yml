@@ -34,7 +34,7 @@ jobs:
           sudo btrfs-convert $TESTLO
           # sudo btrfstune -U 39bd9ac9-1b8c-487c-85b0-5b4726f12ada $TESTLO
           sudo losetup -d $TESTLO
-          sudo remount / -t btrfs
+          sudo mount / -t btrfs -o remount
       - name: Erase everything unnessesarily eating much space
         continue-on-error: true
         run: |
