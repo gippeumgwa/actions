@@ -45,10 +45,10 @@ jobs:
           export MAINDSK="$(findmnt / | tail -n1 | awk '{ print $2 }' | sed -E 's/[0-9]+$//')"
           sudo umount /boot/efi /mnt
           sudo wipefs "$TMPDSK"1 "$TMPDSK" "$MAINDSK"15
-          for I in $(sed 3) ; do sync ; echo 3 | sudo tee /proc/sys/vm/drop_caches ; done || true
           TESTLO="$(sudo losetup -f)"
           sudo losetup $TESTLO "$MAINDSK"1
-          sudo dmesg -w
+          sudo dmesg -w &
+          for I in $(sed 3) ; do sync ; echo 3 | sudo tee /proc/sys/vm/drop_caches ; done || true
           sudo e2fsck -fy $TESTLO || true
           sudo btrfs-convert "$MAINDSK"1
           sudo losetup -d $TESTLO
