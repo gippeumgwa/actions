@@ -25,7 +25,7 @@ jobs:
         continue-on-error: true
         run: |
           sudo apt update
-          sudo apt install -y libudev-dev liblzo2-dev uuid-dev libblkid-dev automake
+          sudo apt install -y libudev-dev liblzo2-dev uuid-dev libblkid-dev comerr-dev libext2fs-dev automake
           git clone https://github.com/kdave/btrfs-progs
           cd btrfs-progs
           git checkout v5.16
