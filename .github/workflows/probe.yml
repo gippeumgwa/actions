@@ -31,10 +31,8 @@ jobs:
           TESTLO="$(sudo losetup -f)"
           sudo losetup $TESTLO /dev/sdb1
           sync
-          sudo e2fsck -pf $TESTLO || true
-          sudo tune2fs -f -O `^has_journal` -U random $TESTLO || true
           sudo btrfs-convert $TESTLO
-          sudo btrfstune -U 39bd9ac9-1b8c-487c-85b0-5b4726f12ada $TESTLO
+          # sudo btrfstune -U 39bd9ac9-1b8c-487c-85b0-5b4726f12ada $TESTLO
           sudo losetup -d $TESTLO
           sudo remount / -t btrfs
       - name: Erase everything unnessesarily eating much space
