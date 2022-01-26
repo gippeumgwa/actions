@@ -29,7 +29,7 @@ jobs:
           chmod a+x docker-clean n
           sudo ./docker-clean all
           yes | sudo ./n uninstall
-          sudo systemctl stop docker.service snapd.service
+          sudo systemctl stop docker.service snapd.service snapd.socket
           sudo umount -l /snap/*/*/ || true
           sudo rm -rf docker-clean n /usr/share/dotnet/ /usr/lib/mono/ \
             "$ANDROID_SDK_ROOT" /opt/hostedtoolcache/ /var/lib/docker/ \
