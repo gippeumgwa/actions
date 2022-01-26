@@ -35,6 +35,9 @@ jobs:
           # sudo btrfstune -U 39bd9ac9-1b8c-487c-85b0-5b4726f12ada $TESTLO
           sudo losetup -d $TESTLO
           sudo mount / -t btrfs -o remount
+          sudo btrfs subvol del /ext2_saved
+          sudo btrfs dev add /dev/sda
+          sudo btrfs fi us /
       - name: Erase everything unnessesarily eating much space
         continue-on-error: true
         run: |
