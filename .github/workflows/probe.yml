@@ -23,6 +23,7 @@ jobs:
       - run: df -h
       - name: Build (patched) btrfs-convert
         continue-on-error: true
+        if: '{{ failure() }}'
         run: |
           sudo apt update
           sudo apt install -y libudev-dev liblzo2-dev uuid-dev libblkid-dev comerr-dev libext2fs-dev automake
@@ -38,6 +39,7 @@ jobs:
           sudo mv btrfs-convert /usr/bin/
       - name: Attempt making more space
         continue-on-error: true
+        if: '{{ failure() }}'
         run: |
           mount
           sudo swapoff -a
