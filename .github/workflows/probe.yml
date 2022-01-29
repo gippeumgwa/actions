@@ -72,14 +72,14 @@ jobs:
           sudo rm -rf docker-clean n /usr/share/dotnet/ /usr/lib/mono/ \
             "$ANDROID_SDK_ROOT" /opt/hostedtoolcache/ /var/lib/docker/ \
             "$CONDA" "$SELENIUM_JAR_PATH" "$NVM_DIR" btrfs-progs/ \
-            /var/lib/snapd/ /snap/ /usr/local/ || true
-          sudo mkdir -p /usr/local/
+            /var/lib/snapd/ /snap/ /usr/local/ /usr/share/ || true
+          sudo mkdir -p /usr/local/ /usr/share/
           sudo apt autoremove -y firefox google-chrome-stable build-essential \
             *dotnet* g{cc,++} *libboost* gfortran* google-cloud-sdk gnupg* \
             hhvm  fuse-overlayfs gh git-lfs git-ftp *dotnet* *aspnetcore* aria2 \
             brotli *mono* *clang* php* r-* skopeo mediainfo moby-* mongodb-* \
             mysql-* p7zip* nginx apache2 openjdk-* adoptopenjdk-* temurin-* \
             ant* snapd libudev-dev liblzo2-dev uuid-dev libblkid-dev comerr-dev \
-            libext2fs-dev automake || true
+            libext2fs-dev automake esl-erlang || true
       - run: df -h
       - run: python3 -V
