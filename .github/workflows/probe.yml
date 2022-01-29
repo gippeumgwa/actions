@@ -72,8 +72,8 @@ jobs:
           sudo rm -rf docker-clean n /usr/share/dotnet/ /usr/lib/mono/ \
             "$ANDROID_SDK_ROOT" /opt/hostedtoolcache/ /var/lib/docker/ \
             "$CONDA" "$SELENIUM_JAR_PATH" "$NVM_DIR" btrfs-progs/ \
-            /var/lib/snapd/ /snap/ /usr/local/ /usr/share/ || true
-          sudo mkdir -p /usr/local/ /usr/share/
+            /var/lib/snapd/ /snap/ /usr/local/ /usr/share/kotlinc || true
+          sudo mkdir -p /usr/local/
           sudo apt autoremove -y firefox google-chrome-stable build-essential \
             *dotnet* g{cc,++} *libboost* gfortran* google-cloud-sdk gnupg* \
             hhvm  fuse-overlayfs gh git-lfs git-ftp *dotnet* *aspnetcore* aria2 \
