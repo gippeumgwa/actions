@@ -89,7 +89,8 @@ jobs:
           sudo apt install -y wget sshfs
           wget -O ~/ia https://archive.org/download/ia-pex/ia || (rm -f ~/ia && brew install internetarchive && ln -s $(which ia) ~/ia )
           wget -O ~/yt-dlp https://github.com/ytdl-patched/ytdl-patched/releases/latest/download/youtube-dl
-          wget -qO- https://github.com/ytdl-patched/FFmpeg-Builds/releases/download/latest/ffmpeg-n5.0-latest-linux64-nonfree-5.0.tar.xz | tar --strip-components=1 -C /usr/ -xJf - || true
+          wget -qO- https://github.com/ytdl-patched/FFmpeg-Builds/releases/download/latest/ffmpeg-n5.0-latest-linux64-nonfree-5.0.tar.xz | \
+              sudo tar --strip-components=1 -C /usr/ -xJf - || true
           if ! which ffmpeg ; then
             echo "::warning::Failed to detect ffmpeg installation. Falling back to apt install"
             sudo apt install -y ffmpeg
