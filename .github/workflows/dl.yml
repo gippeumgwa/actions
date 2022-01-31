@@ -62,27 +62,6 @@ jobs:
           wget -qO- $MACHINE_KEY >> ~/.ssh/known_hosts
           printf "%s" "$SSH_KEY" > ~/.ssh/key
           chmod 600 ~/.ssh/key
-      - name: Erase everything unnessesarily eating much space
-        continue-on-error: true
-        run: |
-          wget https://github.com/ZZROTDesign/docker-clean/raw/master/docker-clean -O docker-clean
-          curl -L https://raw.githubusercontent.com/tj/n/master/bin/n -o n
-          chmod a+x docker-clean n
-          sudo ./docker-clean all
-          yes | sudo ./n uninstall
-          sudo systemctl stop docker.service snapd.service snapd.socket
-          sudo umount -l /snap/*/*/ || true
-          sudo rm -rf docker-clean n /usr/share/dotnet/ /usr/lib/mono/ \
-            "$ANDROID_SDK_ROOT" /opt/hostedtoolcache/ /var/lib/docker/ \
-            "$CONDA" "$SELENIUM_JAR_PATH" "$NVM_DIR" btrfs-progs/ \
-            /var/lib/snapd/ /snap/ || true
-          sudo apt autoremove -y firefox google-chrome-stable build-essential \
-            *dotnet* g{cc,++} *libboost* gfortran* google-cloud-sdk gnupg* \
-            hhvm  fuse-overlayfs gh git-lfs git-ftp *dotnet* *aspnetcore* aria2 \
-            brotli *mono* *clang* php* r-* skopeo mediainfo moby-* mongodb-* \
-            mysql-* p7zip* nginx apache2 openjdk-* adoptopenjdk-* temurin-* \
-            ant* snapd libudev-dev liblzo2-dev uuid-dev libblkid-dev comerr-dev \
-            libext2fs-dev automake || true
       - name: Set up mandantory commands and install config
         run: |
           sudo apt update
@@ -103,9 +82,31 @@ jobs:
           sshfs -o IdentityFile=$HOME/.ssh/key lesmi@"[$(tailscale ip -6 $MACHINE)]":internet_archive/ ./ia/
           ./ia/secret.sh || true
           cp *.conf ~/
-      - name: Check application versions
+      - name: Erase everything unnessesarily eating much space
+        continue-on-error: true
         run: |
-          ~/yt-dlp --verbose || true
+          (
+          wget https://github.com/ZZROTDesign/docker-clean/raw/master/docker-clean -O docker-clean
+          curl -L https://raw.githubusercontent.com/tj/n/master/bin/n -o n
+          chmod a+x docker-clean n
+          sudo ./docker-clean all
+          yes | sudo ./n uninstall
+          sudo systemctl stop docker.service snapd.service snapd.socket
+          sudo umount -l /snap/*/*/ || true
+          sudo rm -rf docker-clean n /usr/share/dotnet/ /usr/lib/mono/ \
+            "$ANDROID_SDK_ROOT" /opt/hostedtoolcache/ /var/lib/docker/ \
+            "$CONDA" "$SELENIUM_JAR_PATH" "$NVM_DIR" btrfs-progs/ \
+            /var/lib/snapd/ /snap/ || true
+          sudo apt autoremove -y firefox google-chrome-stable build-essential \
+            *dotnet* g{cc,++} *libboost* gfortran* google-cloud-sdk gnupg* \
+            hhvm  fuse-overlayfs gh git-lfs git-ftp *dotnet* *aspnetcore* aria2 \
+            brotli *mono* *clang* php* r-* skopeo mediainfo moby-* mongodb-* \
+            mysql-* p7zip* nginx apache2 openjdk-* adoptopenjdk-* temurin-* \
+            ant* snapd libudev-dev liblzo2-dev uuid-dev libblkid-dev comerr-dev \
+            libext2fs-dev automake || true
+          ) &
+      - name: Check application versions
+        run: ~/yt-dlp --verbose || true
       - name: Run task
         working-directory: ia/${{ matrix.kind }}
         run: |
