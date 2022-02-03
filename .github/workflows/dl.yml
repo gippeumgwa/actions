@@ -14,13 +14,14 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.setup.outputs.matrix }}
+      machine_ipaddr: ${{ steps.setup.outputs.machine_ipaddr }}
     steps:
       - uses: actions/checkout@v2
       - name: Set up Tailscale
         uses: tailscale/github-action@main
         with:
           authkey: ${{ secrets.TAILSCALE_AUTHKEY }}
-          version: "1.18.1"
+          version: "1.20.2"
       - name: Set up
         id: setup
         env:
@@ -31,9 +32,11 @@ jobs:
           printf "%s" "$SSH_KEY" > ~/.ssh/key
           chmod 600 ~/.ssh/key
           sudo apt install -y sshfs
-          sshfs -o IdentityFile=$HOME/.ssh/key lesmi@"[$(tailscale ip -6 $MACHINE)]":internet_archive/ ./ia/
+          MACHINE_IPADDR="$(tailscale ip -6 $MACHINE || tailscale ip -6 $MACHINE || tailscale ip -6 $MACHINE)"
+          sshfs -o IdentityFile=$HOME/.ssh/key lesmi@"[$MACHINE_IPADDR]":internet_archive/ ./ia/
           cd ia/
           echo "::set-output name=matrix::$(./enumerate.sh)"
+          echo "::set-output name=machine_ipaddr::$MACHINE_IPADDR"
 
   build:
     needs: [setup]
@@ -41,6 +44,7 @@ jobs:
     continue-on-error: true
     env:
       DIR_KIND: ${{ matrix.kind }}
+      MACHINE_IPADDR: ${{ needs.setup.outputs.machine_ipaddr }}
     strategy:
       max-parallel: 5
       fail-fast: false
@@ -53,7 +57,7 @@ jobs:
         uses: tailscale/github-action@main
         with:
           authkey: ${{ secrets.TAILSCALE_AUTHKEY }}
-          version: "1.18.1"
+          version: "1.20.2"
       - name: Add SSH key
         env:
           SSH_KEY: ${{ secrets.SSH_KEY }}
@@ -76,10 +80,8 @@ jobs:
           fi
           chmod a+x ~/ia ~/yt-dlp
           mkdir -p ~/.config/ ./ia
-          rsync -e "ssh -i $HOME/.ssh/key" lesmi@"[$(tailscale ip -6 $MACHINE)]":.config/ia.ini.bdmv ~/.config/ia.ini
-          # rsync -e "ssh -i $HOME/.ssh/key" lesmi@"[$(tailscale ip -6 $MACHINE)]":ck.txt ~/ck.txt
-          # rsync -r -e "ssh -i $HOME/.ssh/key" lesmi@"[$(tailscale ip -6 $MACHINE)]":internet_archive/"${{ matrix.kind }}" .
-          sshfs -o IdentityFile=$HOME/.ssh/key lesmi@"[$(tailscale ip -6 $MACHINE)]":internet_archive/ ./ia/
+          rsync -e "ssh -i $HOME/.ssh/key" lesmi@"[$MACHINE_IPADDR]":.config/ia.ini.bdmv ~/.config/ia.ini
+          sshfs -o IdentityFile=$HOME/.ssh/key lesmi@"[$MACHINE_IPADDR]":internet_archive/ ./ia/
           ./ia/secret.sh || true
           cp *.conf ~/
       - name: Erase everything unnessesarily eating much space
@@ -125,13 +127,15 @@ jobs:
   post:
     needs: [build]
     runs-on: ubuntu-latest
+    env:
+      MACHINE_IPADDR: ${{ needs.setup.outputs.machine_ipaddr }}
     steps:
       - uses: actions/checkout@v2
       - name: Set up Tailscale
         uses: tailscale/github-action@main
         with:
           authkey: ${{ secrets.TAILSCALE_AUTHKEY }}
-          version: "1.18.1"
+          version: "1.20.2"
       - name: Add SSH key
         env:
           SSH_KEY: ${{ secrets.SSH_KEY }}
@@ -142,4 +146,4 @@ jobs:
           chmod 600 ~/.ssh/key
       - name: Create a save point
         run: |
-          echo 'cd ~/internet_archive && ./save.sh' | ssh -i $HOME/.ssh/key lesmi@"$(tailscale ip -6 $MACHINE)" bash
+          echo 'cd ~/internet_archive && ./save.sh' | ssh -i $HOME/.ssh/key lesmi@"$MACHINE_IPADDR" bash
