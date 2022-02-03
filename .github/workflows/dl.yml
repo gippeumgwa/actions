@@ -125,7 +125,7 @@ jobs:
 
 
   post:
-    needs: [build]
+    needs: [setup,build]
     runs-on: ubuntu-latest
     env:
       MACHINE_IPADDR: ${{ needs.setup.outputs.machine_ipaddr }}
