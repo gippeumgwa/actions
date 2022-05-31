@@ -58,6 +58,7 @@ jobs:
           version: "1.24.2"
       - name: Add SSH key
         run: |
+          set -xe
           mkdir -p ~/.ssh
           wget -qO- $MACHINE_KEY >> ~/.ssh/known_hosts
           printf "%s" "${{ secrets.SSH_KEY }}" > ~/.ssh/key
