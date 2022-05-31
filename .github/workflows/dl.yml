@@ -24,12 +24,10 @@ jobs:
           version: "1.24.2"
       - name: Set up
         id: setup
-        env:
-          SSH_KEY: ${{ secrets.SSH_KEY }}
         run: |
           mkdir -p ~/.ssh ./ia/
           wget -qO- $MACHINE_KEY >> ~/.ssh/known_hosts
-          printf "%s" "$SSH_KEY" > ~/.ssh/key
+          printf "%s" "${{ secrets.SSH_KEY }}" > ~/.ssh/key
           chmod 600 ~/.ssh/key
           sudo apt install -y sshfs
           MACHINE_IPADDR="$(tailscale ip -6 $MACHINE || tailscale ip -6 $MACHINE || tailscale ip -6 $MACHINE)"
@@ -59,12 +57,10 @@ jobs:
           authkey: ${{ secrets.TAILSCALE_AUTHKEY }}
           version: "1.24.2"
       - name: Add SSH key
-        env:
-          SSH_KEY: ${{ secrets.SSH_KEY }}
         run: |
           mkdir -p ~/.ssh
           wget -qO- $MACHINE_KEY >> ~/.ssh/known_hosts
-          printf "%s" "$SSH_KEY" > ~/.ssh/key
+          printf "%s" "${{ secrets.SSH_KEY }}" > ~/.ssh/key
           chmod 600 ~/.ssh/key
       - name: Set up mandantory commands and install config
         run: |
