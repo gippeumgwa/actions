@@ -7,7 +7,7 @@ on:
 
 env:
   MACHINE: misc2
-  MACHINE_KEY: https://git.io/JStgk
+  MACHINE_KEY: https://bit.ly/38WVHmE
 
 jobs:
   setup:
