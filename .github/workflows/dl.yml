@@ -77,6 +77,8 @@ jobs:
             echo "::warning::Failed to detect ffmpeg installation. Falling back to apt install"
             sudo apt install -y ffmpeg
           fi
+          wget -O/tmp/rclone.deb https://github.com/rclone/rclone/releases/download/v1.58.1/rclone-v1.58.1-linux-amd64.deb
+          sudo apt install -y /tmp/rclone.deb
           chmod a+x ~/ia ~/yt-dlp
           mkdir -p ~/.config/rclone/ ./ia
           sshfs -o IdentityFile=$HOME/.ssh/key lesmi@"[$MACHINE_IPADDR]":internet_archive/       ./ia/
@@ -97,14 +99,19 @@ jobs:
           sudo rm -rf docker-clean n /usr/share/dotnet/ /usr/lib/mono/ \
             "$ANDROID_SDK_ROOT" /opt/hostedtoolcache/ /var/lib/docker/ \
             "$CONDA" "$SELENIUM_JAR_PATH" "$NVM_DIR" btrfs-progs/ \
-            /var/lib/snapd/ /snap/ || true
+            /var/lib/snapd/ /snap/ /usr/local/ /usr/share/kotlinc \
+            /home/linuxbrew/.linuxbrew/ /var/lib/apache2 /usr/lib/jvm/ \
+            /var/cache/postgresql/ /tmp/rclone.deb || true
+          sudo mkdir -p /usr/local/
           sudo apt autoremove -y firefox google-chrome-stable build-essential \
             *dotnet* g{cc,++} *libboost* gfortran* google-cloud-sdk gnupg* \
             hhvm  fuse-overlayfs gh git-lfs git-ftp *dotnet* *aspnetcore* aria2 \
             brotli *mono* *clang* php* r-* skopeo mediainfo moby-* mongodb-* \
             mysql-* p7zip* nginx apache2 openjdk-* adoptopenjdk-* temurin-* \
             ant* snapd libudev-dev liblzo2-dev uuid-dev libblkid-dev comerr-dev \
-            libext2fs-dev automake || true
+            libext2fs-dev automake esl-erlang adoptium* automake autotools clang* \
+            imagemagick libmono* || true
+          sudo apt clean || true
           ) &
       - name: Check application versions
         run: ~/yt-dlp --verbose || true
