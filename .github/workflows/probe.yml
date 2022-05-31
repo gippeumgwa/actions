@@ -84,6 +84,7 @@ jobs:
             brotli *mono* *clang* php* r-* skopeo mediainfo moby-* mongodb-* \
             mysql-* p7zip* nginx apache2 openjdk-* adoptopenjdk-* temurin-* \
             ant* snapd libudev-dev liblzo2-dev uuid-dev libblkid-dev comerr-dev \
-            libext2fs-dev automake esl-erlang || true
+            libext2fs-dev automake esl-erlang adoptium* automake autotools clang* \
+            imagemagick libmono* || true
       - run: df -h
       - run: python3 -V
