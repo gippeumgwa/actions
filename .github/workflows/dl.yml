@@ -75,7 +75,7 @@ jobs:
           fi
           wget -O/tmp/rclone.deb https://github.com/rclone/rclone/releases/download/v1.58.1/rclone-v1.58.1-linux-amd64.deb
           sudo apt install -y /tmp/rclone.deb
-          chmod a+x ~/ia ~/yt-dlp
+          chmod a+x ~/yt-dlp
           mkdir -p ~/.config/rclone/ ./ia
           sshfs -o IdentityFile=$HOME/.ssh/key lesmi@"[$MACHINE_IPADDR]":internet_archive/       ./ia/
           sshfs -o IdentityFile=$HOME/.ssh/key lesmi@"[$MACHINE_IPADDR]":~/.config/rclone/ -o ro ~/.config/rclone/
