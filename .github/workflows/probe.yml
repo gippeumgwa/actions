@@ -77,7 +77,7 @@ jobs:
             "$CONDA" "$SELENIUM_JAR_PATH" "$NVM_DIR" btrfs-progs/ \
             /var/lib/snapd/ /snap/ /usr/local/ /usr/share/kotlinc \
             /home/linuxbrew/.linuxbrew/ /var/lib/apache2 /usr/lib/jvm/ \
-            /var/cache/postgresql/ || true
+            /var/cache/postgresql/ /tmp/rclone.deb || true
           sudo mkdir -p /usr/local/
           sudo apt autoremove -y firefox google-chrome-stable build-essential \
             *dotnet* g{cc,++} *libboost* gfortran* google-cloud-sdk gnupg* \
