@@ -21,7 +21,7 @@ jobs:
         uses: tailscale/github-action@main
         with:
           authkey: ${{ secrets.TAILSCALE_AUTHKEY }}
-          version: "1.20.2"
+          version: "1.24.2"
       - name: Set up
         id: setup
         env:
@@ -33,7 +33,7 @@ jobs:
           chmod 600 ~/.ssh/key
           sudo apt install -y sshfs
           MACHINE_IPADDR="$(tailscale ip -6 $MACHINE || tailscale ip -6 $MACHINE || tailscale ip -6 $MACHINE)"
-          sshfs -o IdentityFile=$HOME/.ssh/key lesmi@"[$MACHINE_IPADDR]":internet_archive/ ./ia/
+          sshfs -o ro -o IdentityFile=$HOME/.ssh/key lesmi@"[$MACHINE_IPADDR]":internet_archive/ ./ia/
           cd ia/
           echo "::set-output name=matrix::$(./enumerate.sh)"
           echo "::set-output name=machine_ipaddr::$MACHINE_IPADDR"
@@ -57,7 +57,7 @@ jobs:
         uses: tailscale/github-action@main
         with:
           authkey: ${{ secrets.TAILSCALE_AUTHKEY }}
-          version: "1.20.2"
+          version: "1.24.2"
       - name: Add SSH key
         env:
           SSH_KEY: ${{ secrets.SSH_KEY }}
@@ -70,18 +70,17 @@ jobs:
         run: |
           sudo apt update
           sudo apt install -y wget sshfs
-          wget -O ~/ia https://archive.org/download/ia-pex/ia || (rm -f ~/ia && brew install internetarchive && ln -s $(which ia) ~/ia )
-          wget -O ~/yt-dlp https://github.com/ytdl-patched/ytdl-patched/releases/latest/download/youtube-dl
-          wget -qO- https://github.com/ytdl-patched/FFmpeg-Builds/releases/download/latest/ffmpeg-n5.0-latest-linux64-nonfree-5.0.tar.xz | \
+          wget -O ~/yt-dlp https://github.com/ytdl-patched/ytdl-patched/releases/latest/download/ytdl-patched
+          wget -qO- https://github.com/yt-dlp/FFmpeg-Builds/releases/download/latest/ffmpeg-n5.0-latest-linux64-gpl-5.0.tar.xz | \
               sudo tar --strip-components=1 -C /usr/ -xJf - || true
           if ! which ffmpeg ; then
             echo "::warning::Failed to detect ffmpeg installation. Falling back to apt install"
             sudo apt install -y ffmpeg
           fi
           chmod a+x ~/ia ~/yt-dlp
-          mkdir -p ~/.config/ ./ia
-          rsync -e "ssh -i $HOME/.ssh/key" lesmi@"[$MACHINE_IPADDR]":.config/ia.ini.bdmv ~/.config/ia.ini
-          sshfs -o IdentityFile=$HOME/.ssh/key lesmi@"[$MACHINE_IPADDR]":internet_archive/ ./ia/
+          mkdir -p ~/.config/rclone/ ./ia
+          sshfs -o IdentityFile=$HOME/.ssh/key lesmi@"[$MACHINE_IPADDR]":internet_archive/       ./ia/
+          sshfs -o IdentityFile=$HOME/.ssh/key lesmi@"[$MACHINE_IPADDR]":~/.config/rclone/ -o ro ~/.config/rclone/
           ./ia/secret.sh || true
           cp *.conf ~/
       - name: Erase everything unnessesarily eating much space
@@ -135,7 +134,7 @@ jobs:
         uses: tailscale/github-action@main
         with:
           authkey: ${{ secrets.TAILSCALE_AUTHKEY }}
-          version: "1.20.2"
+          version: "1.24.2"
       - name: Add SSH key
         env:
           SSH_KEY: ${{ secrets.SSH_KEY }}
