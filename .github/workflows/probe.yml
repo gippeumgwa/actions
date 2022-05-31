@@ -14,6 +14,7 @@ jobs:
       - run: apt list --installed
       - run: apt list --installed | grep -v automatic
       - run: ls /home/linuxbrew/.linuxbrew/Cellar/
+      - run: sudo apt update && sudo apt install -y ffmpeg
       - name: path of some commands
         run: |
           whereis helm ant gradle lerna maven sbt ansible apt-fast azcopy bazel \
@@ -87,5 +88,6 @@ jobs:
             ant* snapd libudev-dev liblzo2-dev uuid-dev libblkid-dev comerr-dev \
             libext2fs-dev automake esl-erlang adoptium* automake autotools clang* \
             imagemagick libmono* || true
+          sudo apt clean || true
       - run: df -h
       - run: python3 -V
