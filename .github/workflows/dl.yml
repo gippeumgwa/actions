@@ -26,11 +26,13 @@ jobs:
       - name: Set up
         id: setup
         run: |
+          set -xe
           mkdir -p ~/.ssh ./ia/
           wget -qO- $MACHINE_KEY >> ~/.ssh/known_hosts
           printf "%s" "${{ secrets.SSH_KEY }}" > ~/.ssh/key
           chmod 600 ~/.ssh/key
           sudo apt install -y sshfs
+          ssh -i $HOME/.ssh/key lesmi@"$MACHINE" lsb_release -a
           sshfs -o ro -o IdentityFile=$HOME/.ssh/key lesmi@"$MACHINE":ExDisk/internet_archive/ ./ia/
           cd ia/
           echo "::set-output name=matrix::$(./enumerate.sh)"
