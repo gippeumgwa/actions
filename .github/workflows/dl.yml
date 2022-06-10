@@ -28,6 +28,7 @@ jobs:
         run: |
           set -xe
           mkdir -p ~/.ssh ./ia/
+          tailscale ping "$MACHINE" &>/dev/null
           ssh-keyscan "$MACHINE" >> ~/.ssh/known_hosts
           printf "%s" "${{ secrets.SSH_KEY }}" > ~/.ssh/key
           chmod 600 ~/.ssh/key
