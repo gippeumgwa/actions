@@ -32,7 +32,7 @@ jobs:
           chmod 600 ~/.ssh/key
           sudo apt install -y sshfs
           MACHINE_IPADDR="$(tailscale ip -6 $MACHINE || tailscale ip -6 $MACHINE || tailscale ip -6 $MACHINE)"
-          sshfs -o ro -o IdentityFile=$HOME/.ssh/key lesmi@"[$MACHINE_IPADDR]":internet_archive/ ./ia/
+          sshfs -o ro -o IdentityFile=$HOME/.ssh/key lesmi@"[$MACHINE_IPADDR]":ExDisk/internet_archive/ ./ia/
           cd ia/
           echo "::set-output name=matrix::$(./enumerate.sh)"
           echo "::set-output name=machine_ipaddr::$MACHINE_IPADDR"
@@ -78,7 +78,7 @@ jobs:
           sudo apt install -y /tmp/rclone.deb
           chmod a+x ~/yt-dlp
           mkdir -p ~/.config/rclone/ ./ia
-          sshfs -o IdentityFile=$HOME/.ssh/key lesmi@"[$MACHINE_IPADDR]":internet_archive/     ./ia/
+          sshfs -o IdentityFile=$HOME/.ssh/key lesmi@"[$MACHINE_IPADDR]":ExDisk/internet_archive/ ./ia/
           sshfs -o IdentityFile=$HOME/.ssh/key lesmi@"[$MACHINE_IPADDR]":.config/rclone/ -o ro ~/.config/rclone/
           ./ia/secret.sh || true
           cp *.conf ~/
@@ -149,4 +149,4 @@ jobs:
           chmod 600 ~/.ssh/key
       - name: Create a save point
         run: |
-          echo 'cd ~/internet_archive && ./save.sh' | ssh -i $HOME/.ssh/key lesmi@"$MACHINE_IPADDR" bash
+          echo 'cd ~/ExDisk/internet_archive && ./save.sh' | ssh -i $HOME/.ssh/key lesmi@"$MACHINE_IPADDR" bash
