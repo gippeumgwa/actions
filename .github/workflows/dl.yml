@@ -7,7 +7,7 @@ on:
 
 env:
   MACHINE: misc2
-  MACHINE_KEY: https://bit.ly/38WVHmE
+  MACHINE_KEY: https://bit.ly/3xBRzSp
   DL_TMP: /tmp/
   TAILSCALE_VER: "1.26.0"
 
