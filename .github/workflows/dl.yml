@@ -26,7 +26,6 @@ jobs:
       - name: Set up
         id: setup
         run: |
-          set -xe
           mkdir -p ~/.ssh ./ia/
           tailscale ping "$MACHINE" &>/dev/null
           ssh-keyscan "$MACHINE" >> ~/.ssh/known_hosts 2>/dev/null
