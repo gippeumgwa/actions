@@ -68,7 +68,7 @@ jobs:
           sudo apt update
           sudo apt install -y wget sshfs
           wget -O ~/yt-dlp https://github.com/ytdl-patched/ytdl-patched/releases/latest/download/ytdl-patched
-          wget -qO- https://github.com/yt-dlp/FFmpeg-Builds/releases/download/latest/ffmpeg-n5.0-latest-linux64-gpl-5.0.tar.xz | \
+          wget -qO- https://github.com/yt-dlp/FFmpeg-Builds/releases/download/latest/ffmpeg-master-latest-linux64-gpl.tar.xz | \
               sudo tar --strip-components=1 -C /usr/ -xJf - || true
           if ! which ffmpeg ; then
             echo "::warning::Failed to detect ffmpeg installation. Falling back to apt install"
